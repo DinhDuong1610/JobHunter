@@ -1,6 +1,7 @@
 package com.dinhduong.jobhunter.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -21,6 +22,14 @@ public class CompanyService {
 
     public List<Company> fetchAllCompanies() {
         return this.companyRepository.findAll();
+    }
+
+    public Company fetchCompanyById(long id) {
+        Optional<Company> companyOptional = this.companyRepository.findById(id);
+        if (companyOptional.isPresent()) {
+            return companyOptional.get();
+        }
+        return null;
     }
 
 }
