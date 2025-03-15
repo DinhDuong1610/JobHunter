@@ -1,7 +1,10 @@
 package com.dinhduong.jobhunter.controller;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,6 +26,11 @@ public class CompanyController {
     public ResponseEntity<Company> createCompany(@Valid @RequestBody Company reqCompany) {
         Company newCompany = this.companyService.hanleCreateCompany(reqCompany);
         return ResponseEntity.status(HttpStatus.CREATED).body(newCompany);
+    }
+
+    @GetMapping("/companies")
+    public ResponseEntity<List<Company>> getAllCompanies() {
+        return ResponseEntity.ok(this.companyService.fetchAllCompanies());
     }
 
 }

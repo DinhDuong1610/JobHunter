@@ -1,5 +1,7 @@
 package com.dinhduong.jobhunter.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.dinhduong.jobhunter.domain.Company;
@@ -15,6 +17,10 @@ public class CompanyService {
 
     public Company hanleCreateCompany(Company company) {
         return this.companyRepository.save(company);
+    }
+
+    public List<Company> fetchAllCompanies() {
+        return this.companyRepository.findAll();
     }
 
 }
