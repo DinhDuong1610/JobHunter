@@ -32,4 +32,20 @@ public class CompanyService {
         return null;
     }
 
+    public void handleDeleteCompany(long id) {
+        this.companyRepository.deleteById(id);
+    }
+
+    public Company handleUpdateCompany(Company reqCompany) {
+        Company currentCompany = fetchCompanyById(reqCompany.getId());
+        if (currentCompany != null) {
+            currentCompany.setName(reqCompany.getName());
+            currentCompany.setAddress(reqCompany.getAddress());
+            currentCompany.setDescription(reqCompany.getDescription());
+            currentCompany.setLogo(reqCompany.getLogo());
+            return this.companyRepository.save(currentCompany);
+        }
+        return null;
+    }
+
 }
