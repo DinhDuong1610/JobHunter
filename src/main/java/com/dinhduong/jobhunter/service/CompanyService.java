@@ -3,9 +3,13 @@ package com.dinhduong.jobhunter.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.dinhduong.jobhunter.domain.Company;
+import com.dinhduong.jobhunter.domain.dto.Meta;
+import com.dinhduong.jobhunter.domain.dto.ResultPaginationDTO;
 import com.dinhduong.jobhunter.repository.CompanyRepository;
 
 @Service
@@ -20,8 +24,19 @@ public class CompanyService {
         return this.companyRepository.save(company);
     }
 
-    public List<Company> fetchAllCompanies() {
-        return this.companyRepository.findAll();
+    public ResultPaginationDTO fetchAllCompanies(Pageable pageable) {
+        Page<Company> pageCompany = this.companyRepository.findAll(pageable);
+        ResultPaginationDTO rs = new ResultPaginationDTO();
+        Meta mt = new Meta();
+        mt.setPage(pageCompany.getNumber() + 1);
+        mt.setPageSize(pageCompany.getSize());
+        mt.setPages(pageCompany.getTotalPages());
+        mt.setTotal(pageCompany.getTotalElements());
+
+        rs.setMeta(mt);
+        rs.setResult(pageCompany.getContent());
+
+        return rs;
     }
 
     public Company fetchCompanyById(long id) {
