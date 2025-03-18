@@ -1,8 +1,6 @@
 package com.dinhduong.jobhunter.controller;
 
-import java.util.List;
 import java.util.Optional;
-
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -59,14 +57,7 @@ public class UserController {
 
     @GetMapping("/users")
     public ResponseEntity<ResultPaginationDTO> getAllUsers(
-            @RequestParam("current") Optional<String> currentOptional,
-            @RequestParam("pageSize") Optional<String> pageSizeOptional) {
-        String sCurrent = currentOptional.isPresent() ? currentOptional.get() : "";
-        String sPageSize = pageSizeOptional.isPresent() ? pageSizeOptional.get() : "";
-        int current = Integer.parseInt(sCurrent);
-        int pageSize = Integer.parseInt(sPageSize);
-        Pageable pageable = PageRequest.of(current - 1, pageSize);
-
+            Pageable pageable) {
         return ResponseEntity.ok(this.userService.fetchAllUsers(pageable));
     }
 
