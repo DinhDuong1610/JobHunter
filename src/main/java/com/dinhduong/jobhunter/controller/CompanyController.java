@@ -38,13 +38,7 @@ public class CompanyController {
 
     @GetMapping("/companies")
     public ResponseEntity<ResultPaginationDTO> getAllCompanies(
-            @RequestParam("current") Optional<String> curreOptional,
-            @RequestParam("pageSize") Optional<String> pageSizOptional) {
-        String sCurrent = curreOptional.isPresent() ? curreOptional.get() : "";
-        String sPageSize = pageSizOptional.isPresent() ? pageSizOptional.get() : "";
-        int current = Integer.parseInt(sCurrent);
-        int pageSize = Integer.parseInt(sPageSize);
-        Pageable pageable = PageRequest.of(current - 1, pageSize);
+            Pageable pageable) {
         return ResponseEntity.ok(this.companyService.fetchAllCompanies(pageable));
     }
 
