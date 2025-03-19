@@ -3,6 +3,7 @@ package com.dinhduong.jobhunter.domain.dto;
 import java.time.Instant;
 
 import com.dinhduong.jobhunter.util.constant.GenderEnum;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class ResCreateUserDTO {
     private long id;
@@ -11,6 +12,8 @@ public class ResCreateUserDTO {
     private GenderEnum gender;
     private String address;
     private int age;
+
+    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss a", timezone = "GMT+7")
     private Instant createdAt;
 
     public long getId() {

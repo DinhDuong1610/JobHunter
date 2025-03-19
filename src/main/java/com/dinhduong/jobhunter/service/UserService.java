@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.dinhduong.jobhunter.domain.User;
 import com.dinhduong.jobhunter.domain.dto.Meta;
 import com.dinhduong.jobhunter.domain.dto.ResCreateUserDTO;
+import com.dinhduong.jobhunter.domain.dto.ResUpdateUserDTO;
 import com.dinhduong.jobhunter.domain.dto.ResUserDTO;
 import com.dinhduong.jobhunter.domain.dto.ResultPaginationDTO;
 import com.dinhduong.jobhunter.repository.UserRepository;
@@ -72,8 +73,9 @@ public class UserService {
         User currentUser = this.fetchUserById(reqUser.getId());
         if (currentUser != null) {
             currentUser.setName(reqUser.getName());
-            currentUser.setEmail(reqUser.getEmail());
-            currentUser.setPassword(reqUser.getPassword());
+            currentUser.setAge(reqUser.getAge());
+            currentUser.setGender(reqUser.getGender());
+            currentUser.setAddress(reqUser.getAddress());
 
             currentUser = this.userRepository.save(currentUser);
         }
@@ -109,6 +111,17 @@ public class UserService {
         res.setGender(user.getGender());
         res.setAge(user.getAge());
         res.setCreatedAt(user.getCreatedAt());
+        res.setUpdatedAt(user.getUpdatedAt());
+        return res;
+    }
+
+    public ResUpdateUserDTO convertToResUpdateUserDTO(User user) {
+        ResUpdateUserDTO res = new ResUpdateUserDTO();
+        res.setId(user.getId());
+        res.setName(user.getName());
+        res.setAddress(user.getAddress());
+        res.setGender(user.getGender());
+        res.setAge(user.getAge());
         res.setUpdatedAt(user.getUpdatedAt());
         return res;
     }

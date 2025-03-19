@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.dinhduong.jobhunter.domain.User;
 import com.dinhduong.jobhunter.domain.dto.ResCreateUserDTO;
+import com.dinhduong.jobhunter.domain.dto.ResUpdateUserDTO;
 import com.dinhduong.jobhunter.domain.dto.ResUserDTO;
 import com.dinhduong.jobhunter.domain.dto.ResultPaginationDTO;
 import com.dinhduong.jobhunter.service.UserService;
@@ -84,8 +85,13 @@ public class UserController {
     }
 
     @PutMapping("/users")
-    public ResponseEntity<User> updateUser(@RequestBody User user) {
+    @ApiMessage("Update a user")
+    public ResponseEntity<ResUpdateUserDTO> updateUser(@RequestBody User user) throws IdInvalidException {
         User userUpdate = this.userService.handleUpdateUser(user);
-        return ResponseEntity.ok(user);
+        if (userUpdate == null) {
+            throw new IdInvalidException("User có id = " + user.getId() + " không tồn tại");
+        }
+
+        return ResponseEntity.ok(this.userService.convertToResUpdateUserDTO(userUpdate));
     }
 }
