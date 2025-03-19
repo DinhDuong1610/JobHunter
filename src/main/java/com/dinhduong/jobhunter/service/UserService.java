@@ -3,6 +3,7 @@ package com.dinhduong.jobhunter.service;
 import java.lang.reflect.Member;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.dinhduong.jobhunter.domain.User;
 import com.dinhduong.jobhunter.domain.dto.Meta;
 import com.dinhduong.jobhunter.domain.dto.ResCreateUserDTO;
+import com.dinhduong.jobhunter.domain.dto.ResUserDTO;
 import com.dinhduong.jobhunter.domain.dto.ResultPaginationDTO;
 import com.dinhduong.jobhunter.repository.UserRepository;
 
@@ -48,7 +50,20 @@ public class UserService {
         mt.setTotal(pageUser.getTotalElements());
 
         rs.setMeta(mt);
-        rs.setResult(pageUser.getContent());
+
+        List<ResUserDTO> listUser = pageUser.getContent()
+                .stream().map(item -> new ResUserDTO(
+                        item.getId(),
+                        item.getEmail(),
+                        item.getName(),
+                        item.getGender(),
+                        item.getAddress(),
+                        item.getAge(),
+                        item.getCreatedAt(),
+                        item.getUpdatedAt()))
+                .collect(Collectors.toList());
+
+        rs.setResult(listUser);
 
         return rs;
     }
@@ -82,6 +97,19 @@ public class UserService {
         res.setGender(user.getGender());
         res.setAge(user.getAge());
         res.setCreatedAt(user.getCreatedAt());
+        return res;
+    }
+
+    public ResUserDTO convertToResUserDTO(User user) {
+        ResUserDTO res = new ResUserDTO();
+        res.setId(user.getId());
+        res.setEmail(user.getEmail());
+        res.setName(user.getName());
+        res.setAddress(user.getAddress());
+        res.setGender(user.getGender());
+        res.setAge(user.getAge());
+        res.setCreatedAt(user.getCreatedAt());
+        res.setUpdatedAt(user.getUpdatedAt());
         return res;
     }
 

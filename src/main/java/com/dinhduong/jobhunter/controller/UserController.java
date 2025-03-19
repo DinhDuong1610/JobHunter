@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.dinhduong.jobhunter.domain.User;
 import com.dinhduong.jobhunter.domain.dto.ResCreateUserDTO;
+import com.dinhduong.jobhunter.domain.dto.ResUserDTO;
 import com.dinhduong.jobhunter.domain.dto.ResultPaginationDTO;
 import com.dinhduong.jobhunter.service.UserService;
 import com.dinhduong.jobhunter.util.annotation.ApiMessage;
@@ -63,9 +64,15 @@ public class UserController {
     }
 
     @GetMapping("/users/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable("id") long id) {
+    @ApiMessage("fetch user by id")
+    public ResponseEntity<ResUserDTO> getUserById(@PathVariable("id") long id) throws IdInvalidException {
+        User fetchUser = this.userService.fetchUserById(id);
+        if (fetchUser == null) {
+            throw new IdInvalidException("User có id = " + id + " không tồn tại");
+        }
+
         User user = this.userService.fetchUserById(id);
-        return ResponseEntity.ok(user);
+        return ResponseEntity.ok(this.userService.convertToResUserDTO(user));
 
     }
 
