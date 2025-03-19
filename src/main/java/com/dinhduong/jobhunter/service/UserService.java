@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.dinhduong.jobhunter.domain.User;
 import com.dinhduong.jobhunter.domain.dto.Meta;
+import com.dinhduong.jobhunter.domain.dto.ResCreateUserDTO;
 import com.dinhduong.jobhunter.domain.dto.ResultPaginationDTO;
 import com.dinhduong.jobhunter.repository.UserRepository;
 
@@ -66,6 +67,22 @@ public class UserService {
 
     public User handleGetUsername(String username) {
         return this.userRepository.findByEmail(username);
+    }
+
+    public boolean isEmailExist(String email) {
+        return this.userRepository.existsByEmail(email);
+    }
+
+    public ResCreateUserDTO convertToResCreateUserDTO(User user) {
+        ResCreateUserDTO res = new ResCreateUserDTO();
+        res.setId(user.getId());
+        res.setEmail(user.getEmail());
+        res.setName(user.getName());
+        res.setAddress(user.getAddress());
+        res.setGender(user.getGender());
+        res.setAge(user.getAge());
+        res.setCreatedAt(user.getCreatedAt());
+        return res;
     }
 
 }

@@ -17,10 +17,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dinhduong.jobhunter.domain.User;
+import com.dinhduong.jobhunter.domain.dto.ResCreateUserDTO;
 import com.dinhduong.jobhunter.domain.dto.ResultPaginationDTO;
 import com.dinhduong.jobhunter.service.UserService;
 import com.dinhduong.jobhunter.util.annotation.ApiMessage;
 import com.dinhduong.jobhunter.util.error.IdInvalidException;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -35,11 +38,17 @@ public class UserController {
     }
 
     @PostMapping("/users")
-    public ResponseEntity<User> createNewUser(@RequestBody User newUser) {
+    @ApiMessage("Create a new User")
+    public ResponseEntity<ResCreateUserDTO> createNewUser(@Valid @RequestBody User newUser) throws IdInvalidException {
+        boolean isEmailExist = this.userService.isEmailExist(newUser.getEmail());
+        if (isEmailExist) {
+            throw new IdInvalidException("Email " + newUser.getEmail() + " đã tồn tại, vui lòng sử dụng email khác");
+        }
+
         String hashPassword = this.passwordEncoder.encode(newUser.getPassword());
         newUser.setPassword(hashPassword);
         User user = this.userService.handleCreateUser(newUser);
-        return ResponseEntity.status(HttpStatus.CREATED).body(user);
+        return ResponseEntity.status(HttpStatus.CREATED).body(this.userService.convertToResCreateUserDTO(user));
     }
 
     @DeleteMapping("/users/{id}")
