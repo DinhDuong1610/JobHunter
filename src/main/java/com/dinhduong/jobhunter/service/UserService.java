@@ -1,6 +1,5 @@
 package com.dinhduong.jobhunter.service;
 
-import java.lang.reflect.Member;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -8,7 +7,6 @@ import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
 import com.dinhduong.jobhunter.domain.User;
 import com.dinhduong.jobhunter.domain.dto.Meta;
 import com.dinhduong.jobhunter.domain.dto.ResCreateUserDTO;
@@ -19,6 +17,7 @@ import com.dinhduong.jobhunter.repository.UserRepository;
 
 @Service
 public class UserService {
+
     private final UserRepository userRepository;
 
     public UserService(UserRepository userRepository) {
@@ -124,6 +123,14 @@ public class UserService {
         res.setAge(user.getAge());
         res.setUpdatedAt(user.getUpdatedAt());
         return res;
+    }
+
+    public void updateUserToken(String token, String email) {
+        User currentUser = this.handleGetUsername(email);
+        if (currentUser != null) {
+            currentUser.setRefreshToken(token);
+            this.userRepository.save(currentUser);
+        }
     }
 
 }

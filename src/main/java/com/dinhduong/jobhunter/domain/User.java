@@ -6,6 +6,7 @@ import com.dinhduong.jobhunter.util.SecurityUtil;
 import com.dinhduong.jobhunter.util.constant.GenderEnum;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -37,6 +38,8 @@ public class User {
     private GenderEnum gender;
 
     private String address;
+
+    @Column(columnDefinition = "MEDIUMTEXT")
     private String refreshToken;
 
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss a", timezone = "GMT+7")
