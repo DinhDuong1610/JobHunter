@@ -24,7 +24,6 @@ import com.dinhduong.jobhunter.util.SecurityUtil;
 import com.dinhduong.jobhunter.util.annotation.ApiMessage;
 import com.dinhduong.jobhunter.util.error.IdInvalidException;
 
-import io.micrometer.core.ipc.http.HttpSender.Response;
 import jakarta.validation.Valid;
 
 @RestController
