@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.dinhduong.jobhunter.domain.Company;
-import com.dinhduong.jobhunter.domain.dto.ResultPaginationDTO;
+import com.dinhduong.jobhunter.domain.response.ResultPaginationDTO;
 import com.dinhduong.jobhunter.repository.CompanyRepository;
 
 @Service

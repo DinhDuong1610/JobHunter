@@ -8,10 +8,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import com.dinhduong.jobhunter.domain.User;
-import com.dinhduong.jobhunter.domain.dto.ResCreateUserDTO;
-import com.dinhduong.jobhunter.domain.dto.ResUpdateUserDTO;
-import com.dinhduong.jobhunter.domain.dto.ResUserDTO;
-import com.dinhduong.jobhunter.domain.dto.ResultPaginationDTO;
+import com.dinhduong.jobhunter.domain.response.ResCreateUserDTO;
+import com.dinhduong.jobhunter.domain.response.ResUpdateUserDTO;
+import com.dinhduong.jobhunter.domain.response.ResUserDTO;
+import com.dinhduong.jobhunter.domain.response.ResultPaginationDTO;
 import com.dinhduong.jobhunter.repository.UserRepository;
 
 @Service

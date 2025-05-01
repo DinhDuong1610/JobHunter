@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dinhduong.jobhunter.domain.Company;
-import com.dinhduong.jobhunter.domain.dto.ResultPaginationDTO;
+import com.dinhduong.jobhunter.domain.response.ResultPaginationDTO;
 import com.dinhduong.jobhunter.service.CompanyService;
 
 import jakarta.validation.Valid;

@@ -1,19 +1,20 @@
-package com.dinhduong.jobhunter.domain.dto;
+package com.dinhduong.jobhunter.domain.response;
 
 import java.time.Instant;
 
 import com.dinhduong.jobhunter.util.constant.GenderEnum;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-public class ResUpdateUserDTO {
+public class ResCreateUserDTO {
     private long id;
     private String name;
+    private String email;
     private GenderEnum gender;
     private String address;
     private int age;
 
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss a", timezone = "GMT+7")
-    private Instant updatedAt;
+    private Instant createdAt;
 
     public long getId() {
         return id;
@@ -29,6 +30,14 @@ public class ResUpdateUserDTO {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public GenderEnum getGender() {
@@ -55,12 +64,12 @@ public class ResUpdateUserDTO {
         this.age = age;
     }
 
-    public Instant getUpdatedAt() {
-        return updatedAt;
+    public Instant getCreatedAt() {
+        return createdAt;
     }
 
-    public void setUpdatedAt(Instant updatedAt) {
-        this.updatedAt = updatedAt;
+    public void setCreatedAt(Instant createdAt) {
+        this.createdAt = createdAt;
     }
 
 }
