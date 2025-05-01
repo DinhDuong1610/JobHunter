@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dinhduong.jobhunter.domain.User;
-import com.dinhduong.jobhunter.domain.dto.LoginDTO;
+import com.dinhduong.jobhunter.domain.dto.ReqLoginDTO;
 import com.dinhduong.jobhunter.domain.dto.ResLoginDTO;
 import com.dinhduong.jobhunter.service.UserService;
 import com.dinhduong.jobhunter.util.SecurityUtil;
@@ -44,7 +44,7 @@ public class AuthController {
         }
 
         @PostMapping("/auth/login")
-        public ResponseEntity<ResLoginDTO> login(@Valid @RequestBody LoginDTO loginDTO) {
+        public ResponseEntity<ResLoginDTO> login(@Valid @RequestBody ReqLoginDTO loginDTO) {
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                                 loginDTO.getUsername(), loginDTO.getPassword());
                 Authentication authentication = authenticationManagerBuilder.getObject()
