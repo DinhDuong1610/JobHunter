@@ -7,6 +7,8 @@ import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import com.dinhduong.jobhunter.domain.Company;
 import com.dinhduong.jobhunter.domain.User;
 import com.dinhduong.jobhunter.domain.response.ResCreateUserDTO;
 import com.dinhduong.jobhunter.domain.response.ResUpdateUserDTO;
@@ -18,12 +20,19 @@ import com.dinhduong.jobhunter.repository.UserRepository;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final CompanyService companyService;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, CompanyService companyService) {
         this.userRepository = userRepository;
+        this.companyService = companyService;
     }
 
     public User handleCreateUser(User user) {
+        if (user.getCompany() != null) {
+            Company company = this.companyService.fetchCompanyById(user.getCompany().getId());
+            user.setCompany(company);
+        }
+
         return this.userRepository.save(user);
     }
 
@@ -59,7 +68,10 @@ public class UserService {
                         item.getAddress(),
                         item.getAge(),
                         item.getCreatedAt(),
-                        item.getUpdatedAt()))
+                        item.getUpdatedAt(),
+                        new ResUserDTO.CompanyUser(
+                                item.getCompany() != null ? item.getCompany().getId() : 0,
+                                item.getCompany() != null ? item.getCompany().getName() : null)))
                 .collect(Collectors.toList());
 
         rs.setResult(listUser);
@@ -74,6 +86,11 @@ public class UserService {
             currentUser.setAge(reqUser.getAge());
             currentUser.setGender(reqUser.getGender());
             currentUser.setAddress(reqUser.getAddress());
+
+            if (reqUser.getCompany() != null) {
+                Company company = this.companyService.fetchCompanyById(reqUser.getCompany().getId());
+                currentUser.setCompany(company);
+            }
 
             currentUser = this.userRepository.save(currentUser);
         }
@@ -90,6 +107,7 @@ public class UserService {
 
     public ResCreateUserDTO convertToResCreateUserDTO(User user) {
         ResCreateUserDTO res = new ResCreateUserDTO();
+        ResCreateUserDTO.CompanyUser company = new ResCreateUserDTO.CompanyUser();
         res.setId(user.getId());
         res.setEmail(user.getEmail());
         res.setName(user.getName());
@@ -97,11 +115,17 @@ public class UserService {
         res.setGender(user.getGender());
         res.setAge(user.getAge());
         res.setCreatedAt(user.getCreatedAt());
+        if (user.getCompany() != null) {
+            company.setId(user.getCompany().getId());
+            company.setName(user.getCompany().getName());
+            res.setCompany(company);
+        }
         return res;
     }
 
     public ResUserDTO convertToResUserDTO(User user) {
         ResUserDTO res = new ResUserDTO();
+        ResUserDTO.CompanyUser company = new ResUserDTO.CompanyUser();
         res.setId(user.getId());
         res.setEmail(user.getEmail());
         res.setName(user.getName());
@@ -110,17 +134,28 @@ public class UserService {
         res.setAge(user.getAge());
         res.setCreatedAt(user.getCreatedAt());
         res.setUpdatedAt(user.getUpdatedAt());
+        if (user.getCompany() != null) {
+            company.setId(user.getCompany().getId());
+            company.setName(user.getCompany().getName());
+            res.setCompany(company);
+        }
         return res;
     }
 
     public ResUpdateUserDTO convertToResUpdateUserDTO(User user) {
         ResUpdateUserDTO res = new ResUpdateUserDTO();
+        ResUpdateUserDTO.CompanyUser company = new ResUpdateUserDTO.CompanyUser();
         res.setId(user.getId());
         res.setName(user.getName());
         res.setAddress(user.getAddress());
         res.setGender(user.getGender());
         res.setAge(user.getAge());
         res.setUpdatedAt(user.getUpdatedAt());
+        if (user.getCompany() != null) {
+            company.setId(user.getCompany().getId());
+            company.setName(user.getCompany().getName());
+            res.setCompany(company);
+        }
         return res;
     }
 

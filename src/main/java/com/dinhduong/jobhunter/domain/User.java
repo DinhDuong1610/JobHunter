@@ -168,4 +168,12 @@ public class User {
         this.gender = gender;
     }
 
+    public Company getCompany() {
+        return company;
+    }
+
+    public void setCompany(Company company) {
+        this.company = company;
+    }
+
 }
