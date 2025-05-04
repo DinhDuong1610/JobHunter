@@ -1,7 +1,9 @@
 package com.dinhduong.jobhunter.controller;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dinhduong.jobhunter.domain.Skill;
+import com.dinhduong.jobhunter.domain.response.ResultPaginationDTO;
 import com.dinhduong.jobhunter.service.SkillService;
 import com.dinhduong.jobhunter.util.annotation.ApiMessage;
 import com.dinhduong.jobhunter.util.error.IdInvalidException;
@@ -44,7 +47,13 @@ public class SkillController {
             throw new IdInvalidException("Skill name = " + skill.getName() + " đã tồn tại");
         }
         currentSkill.setName(skill.getName());
-        return ResponseEntity.ok().body(this.skillService.updateSkill(currentSkill));
+        return ResponseEntity.ok(this.skillService.updateSkill(currentSkill));
+    }
+
+    @GetMapping("/skills")
+    @ApiMessage("fetch all skills")
+    public ResponseEntity<ResultPaginationDTO> getAll(Pageable pageable) {
+        return ResponseEntity.ok(this.skillService.fetchAllSkills(pageable));
     }
 
 }
