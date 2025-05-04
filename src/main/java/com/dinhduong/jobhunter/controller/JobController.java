@@ -2,9 +2,11 @@ package com.dinhduong.jobhunter.controller;
 
 import java.util.Optional;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dinhduong.jobhunter.domain.Job;
+import com.dinhduong.jobhunter.domain.response.ResultPaginationDTO;
 import com.dinhduong.jobhunter.domain.response.job.ResCreateJobDTO;
 import com.dinhduong.jobhunter.domain.response.job.ResUpdateJobDTO;
 import com.dinhduong.jobhunter.service.JobService;
@@ -55,6 +58,22 @@ public class JobController {
         }
         this.jobService.delete(id);
         return ResponseEntity.ok().body(null);
+    }
+
+    @GetMapping("/jobs")
+    @ApiMessage("fetch all jobs")
+    public ResponseEntity<ResultPaginationDTO> getAll(Pageable pageable) {
+        return ResponseEntity.ok(this.jobService.fetchAllJobs(pageable));
+    }
+
+    @GetMapping("/jobs/{id}")
+    @ApiMessage("fetch job by id")
+    public ResponseEntity<Job> getJobById(@PathVariable("id") long id) throws IdInvalidException {
+        Optional<Job> jobOptional = this.jobService.fetchJobById(id);
+        if (!jobOptional.isPresent()) {
+            throw new IdInvalidException("Job id = " + id + " khong ton tai");
+        }
+        return ResponseEntity.ok().body(jobOptional.get());
     }
 
 }

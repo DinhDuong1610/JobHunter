@@ -4,10 +4,13 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.dinhduong.jobhunter.domain.Job;
 import com.dinhduong.jobhunter.domain.Skill;
+import com.dinhduong.jobhunter.domain.response.ResultPaginationDTO;
 import com.dinhduong.jobhunter.domain.response.job.ResCreateJobDTO;
 import com.dinhduong.jobhunter.domain.response.job.ResUpdateJobDTO;
 import com.dinhduong.jobhunter.repository.JobRepository;
@@ -97,6 +100,21 @@ public class JobService {
 
     public void delete(long id) {
         this.jobRepository.deleteById(id);
+    }
+
+    public ResultPaginationDTO fetchAllJobs(Pageable pageable) {
+        Page<Job> pageJob = this.jobRepository.findAll(pageable);
+
+        ResultPaginationDTO rs = new ResultPaginationDTO();
+        ResultPaginationDTO.Meta mt = new ResultPaginationDTO.Meta();
+        mt.setPage(pageable.getPageNumber() + 1);
+        mt.setPageSize(pageable.getPageSize());
+        mt.setPages(pageJob.getTotalPages());
+        mt.setTotal(pageJob.getTotalElements());
+
+        rs.setMeta(mt);
+        rs.setResult(pageJob.getContent());
+        return rs;
     }
 
 }
