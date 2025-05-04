@@ -3,6 +3,7 @@ package com.dinhduong.jobhunter.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,6 +31,20 @@ public class SkillController {
             throw new IdInvalidException("Skill name = " + skill.getName() + " đã tồn tại");
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(this.skillService.createSkill(skill));
+    }
+
+    @PutMapping("/skills")
+    @ApiMessage("Update a skill")
+    public ResponseEntity<Skill> update(@Valid @RequestBody Skill skill) throws IdInvalidException {
+        Skill currentSkill = this.skillService.fetchSkillById(skill.getId());
+        if (currentSkill == null) {
+            throw new IdInvalidException("Skill id =" + skill.getName() + " đã tồn tại");
+        }
+        if (skill.getName() != null && this.skillService.isNameExist(skill.getName())) {
+            throw new IdInvalidException("Skill name = " + skill.getName() + " đã tồn tại");
+        }
+        currentSkill.setName(skill.getName());
+        return ResponseEntity.ok().body(this.skillService.updateSkill(currentSkill));
     }
 
 }

@@ -1,5 +1,7 @@
 package com.dinhduong.jobhunter.service;
 
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 
 import com.dinhduong.jobhunter.domain.Skill;
@@ -17,7 +19,19 @@ public class SkillService {
         return this.skillRepository.existsByName(name);
     }
 
+    public Skill fetchSkillById(long id) {
+        Optional<Skill> skillOptional = this.skillRepository.findById(id);
+        if (skillOptional.isPresent()) {
+            return skillOptional.get();
+        }
+        return null;
+    }
+
     public Skill createSkill(Skill skill) {
+        return this.skillRepository.save(skill);
+    }
+
+    public Skill updateSkill(Skill skill) {
         return this.skillRepository.save(skill);
     }
 
