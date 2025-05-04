@@ -6,7 +6,6 @@ import java.util.List;
 import com.dinhduong.jobhunter.util.SecurityUtil;
 import com.dinhduong.jobhunter.util.constant.LevelEnum;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Column;
@@ -32,6 +31,8 @@ public class Job {
 
     private String name;
     private String location;
+    private double salary;
+    private int quantity;
     private LevelEnum level;
 
     @Column(columnDefinition = "MEDIUMTEXT")
@@ -184,6 +185,22 @@ public class Job {
 
     public void setSkills(List<Skill> skills) {
         this.skills = skills;
+    }
+
+    public double getSalary() {
+        return salary;
+    }
+
+    public void setSalary(double salary) {
+        this.salary = salary;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 
 }
