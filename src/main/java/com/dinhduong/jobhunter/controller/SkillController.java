@@ -3,7 +3,9 @@ package com.dinhduong.jobhunter.controller;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -41,7 +43,7 @@ public class SkillController {
     public ResponseEntity<Skill> update(@Valid @RequestBody Skill skill) throws IdInvalidException {
         Skill currentSkill = this.skillService.fetchSkillById(skill.getId());
         if (currentSkill == null) {
-            throw new IdInvalidException("Skill id =" + skill.getName() + " đã tồn tại");
+            throw new IdInvalidException("Skill id =" + skill.getName() + " không tồn tại");
         }
         if (skill.getName() != null && this.skillService.isNameExist(skill.getName())) {
             throw new IdInvalidException("Skill name = " + skill.getName() + " đã tồn tại");
@@ -54,6 +56,17 @@ public class SkillController {
     @ApiMessage("fetch all skills")
     public ResponseEntity<ResultPaginationDTO> getAll(Pageable pageable) {
         return ResponseEntity.ok(this.skillService.fetchAllSkills(pageable));
+    }
+
+    @DeleteMapping("/skills/{id}")
+    @ApiMessage("Delete a skill")
+    public ResponseEntity<Void> delete(@PathVariable("id") long id) throws IdInvalidException {
+        Skill currentSkill = this.skillService.fetchSkillById(id);
+        if (currentSkill == null) {
+            throw new IdInvalidException("Skill id =" + currentSkill.getName() + " không tồn tại");
+        }
+        this.skillService.deleteSkill(id);
+        return ResponseEntity.ok(null);
     }
 
 }
