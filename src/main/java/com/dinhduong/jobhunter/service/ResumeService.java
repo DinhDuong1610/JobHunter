@@ -9,6 +9,7 @@ import com.dinhduong.jobhunter.domain.Resume;
 import com.dinhduong.jobhunter.domain.User;
 import com.dinhduong.jobhunter.domain.response.job.ResUpdateJobDTO;
 import com.dinhduong.jobhunter.domain.response.resume.ResCreateResumeDTO;
+import com.dinhduong.jobhunter.domain.response.resume.ResFetchResumeDTO;
 import com.dinhduong.jobhunter.domain.response.resume.ResUpdateResumeDTO;
 import com.dinhduong.jobhunter.repository.JobRepository;
 import com.dinhduong.jobhunter.repository.ResumeRepository;
@@ -70,6 +71,22 @@ public class ResumeService {
 
     public void delete(long id) {
         this.resumeRepository.deleteById(id);
+    }
+
+    public ResFetchResumeDTO getResume(Resume resume) {
+        ResFetchResumeDTO res = new ResFetchResumeDTO();
+        res.setId(resume.getId());
+        res.setEmail(resume.getEmail());
+        res.setUrl(resume.getUrl());
+        res.setStatus(resume.getStatus());
+        res.setCreatedAt(resume.getCreatedAt());
+        res.setUpdatedAt(resume.getUpdatedAt());
+        res.setCreatedBy(resume.getCreatedBy());
+        res.setUpdatedBy(resume.getUpdatedBy());
+        res.setUser(new ResFetchResumeDTO.UserResume(resume.getUser().getId(), resume.getUser().getName()));
+        res.setJob(new ResFetchResumeDTO.JobResume(resume.getJob().getId(), resume.getJob().getName()));
+
+        return res;
     }
 
 }

@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -14,11 +15,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.dinhduong.jobhunter.domain.Resume;
 import com.dinhduong.jobhunter.domain.response.resume.ResCreateResumeDTO;
+import com.dinhduong.jobhunter.domain.response.resume.ResFetchResumeDTO;
 import com.dinhduong.jobhunter.domain.response.resume.ResUpdateResumeDTO;
 import com.dinhduong.jobhunter.service.ResumeService;
 import com.dinhduong.jobhunter.util.annotation.ApiMessage;
 import com.dinhduong.jobhunter.util.error.IdInvalidException;
 
+import io.micrometer.core.instrument.Meter.Id;
 import jakarta.validation.Valid;
 
 @RestController
@@ -65,6 +68,17 @@ public class ResumeController {
 
         this.resumeService.delete(id);
         return ResponseEntity.ok().body(null);
+    }
+
+    @GetMapping("resumes/{id}")
+    @ApiMessage("Fetch a resume by id")
+    public ResponseEntity<ResFetchResumeDTO> fetchById(@PathVariable("id") long id) throws IdInvalidException {
+        Optional<Resume> reqResumeOptional = this.resumeService.fetchById(id);
+        if (reqResumeOptional.isEmpty()) {
+            throw new IdInvalidException("Resume id = " + id + " không tồn tại");
+        }
+
+        return ResponseEntity.ok().body(this.resumeService.getResume(reqResumeOptional.get()));
     }
 
 }
