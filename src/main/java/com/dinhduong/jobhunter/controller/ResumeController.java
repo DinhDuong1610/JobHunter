@@ -4,6 +4,8 @@ import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -51,6 +53,18 @@ public class ResumeController {
         reqResume.setStatus(resume.getStatus());
 
         return ResponseEntity.ok().body(this.resumeService.update(reqResume));
+    }
+
+    @DeleteMapping("/resumes/{id}")
+    @ApiMessage("Delete a resume by id")
+    public ResponseEntity<Void> delete(@PathVariable("id") long id) throws IdInvalidException {
+        Optional<Resume> reqResumeOptional = this.resumeService.fetchById(id);
+        if (reqResumeOptional.isEmpty()) {
+            throw new IdInvalidException("Resume id = " + id + " không tồn tại");
+        }
+
+        this.resumeService.delete(id);
+        return ResponseEntity.ok().body(null);
     }
 
 }
