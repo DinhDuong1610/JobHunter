@@ -1,12 +1,18 @@
 package com.dinhduong.jobhunter.service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.dinhduong.jobhunter.domain.Job;
 import com.dinhduong.jobhunter.domain.Resume;
+import com.dinhduong.jobhunter.domain.Skill;
 import com.dinhduong.jobhunter.domain.User;
+import com.dinhduong.jobhunter.domain.response.ResultPaginationDTO;
 import com.dinhduong.jobhunter.domain.response.job.ResUpdateJobDTO;
 import com.dinhduong.jobhunter.domain.response.resume.ResCreateResumeDTO;
 import com.dinhduong.jobhunter.domain.response.resume.ResFetchResumeDTO;
@@ -87,6 +93,29 @@ public class ResumeService {
         res.setJob(new ResFetchResumeDTO.JobResume(resume.getJob().getId(), resume.getJob().getName()));
 
         return res;
+    }
+
+    public ResultPaginationDTO fetchAllResume(Pageable pageable) {
+        Page<Resume> pageResume = this.resumeRepository.findAll(pageable);
+
+        ResultPaginationDTO rs = new ResultPaginationDTO();
+        ResultPaginationDTO.Meta mt = new ResultPaginationDTO.Meta();
+
+        mt.setPage(pageable.getPageNumber() + 1);
+        mt.setPageSize(pageable.getPageSize());
+        mt.setPages(pageResume.getTotalPages());
+        mt.setTotal(pageResume.getTotalElements());
+
+        rs.setMeta(mt);
+
+        List<ResFetchResumeDTO> listResume = pageResume.getContent()
+                .stream()
+                .map(item -> this.getResume(item))
+                .collect(Collectors.toList());
+
+        rs.setResult(listResume);
+
+        return rs;
     }
 
 }
