@@ -2,23 +2,14 @@ package com.dinhduong.jobhunter.domain.response.resume;
 
 import java.time.Instant;
 
+import com.dinhduong.jobhunter.util.constant.ResumeStateEnum;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-public class ResCreateResumeDTO {
-    private long id;
-
+public class ResUpdateResumeDTO {
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss a", timezone = "GMT+7")
     private Instant createdAt;
 
     private String createdBy;
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
 
     public Instant getCreatedAt() {
         return createdAt;

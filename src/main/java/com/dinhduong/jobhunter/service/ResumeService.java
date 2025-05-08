@@ -7,7 +7,9 @@ import org.springframework.stereotype.Service;
 import com.dinhduong.jobhunter.domain.Job;
 import com.dinhduong.jobhunter.domain.Resume;
 import com.dinhduong.jobhunter.domain.User;
+import com.dinhduong.jobhunter.domain.response.job.ResUpdateJobDTO;
 import com.dinhduong.jobhunter.domain.response.resume.ResCreateResumeDTO;
+import com.dinhduong.jobhunter.domain.response.resume.ResUpdateResumeDTO;
 import com.dinhduong.jobhunter.repository.JobRepository;
 import com.dinhduong.jobhunter.repository.ResumeRepository;
 import com.dinhduong.jobhunter.repository.UserRepository;
@@ -46,6 +48,20 @@ public class ResumeService {
 
         ResCreateResumeDTO res = new ResCreateResumeDTO();
         res.setId(resume.getId());
+        res.setCreatedAt(resume.getCreatedAt());
+        res.setCreatedBy(resume.getCreatedBy());
+
+        return res;
+    }
+
+    public Optional<Resume> fetchById(long id) {
+        return this.resumeRepository.findById(id);
+    }
+
+    public ResUpdateResumeDTO update(Resume resume) {
+        resume = this.resumeRepository.save(resume);
+
+        ResUpdateResumeDTO res = new ResUpdateResumeDTO();
         res.setCreatedAt(resume.getCreatedAt());
         res.setCreatedBy(resume.getCreatedBy());
 
