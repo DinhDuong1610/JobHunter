@@ -41,4 +41,11 @@ public class PermissionService {
 
         return this.permissionRepository.save(permissionDB);
     }
+
+    public void delete(long id) {
+        Optional<Permission> permissionOptional = this.permissionRepository.findById(id);
+        Permission currentPermission = permissionOptional.get();
+        currentPermission.getRoles().forEach(role -> role.getPermissions().remove(currentPermission));
+        this.permissionRepository.delete(currentPermission);
+    }
 }
