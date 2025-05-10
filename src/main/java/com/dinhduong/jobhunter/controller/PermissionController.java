@@ -1,8 +1,10 @@
 package com.dinhduong.jobhunter.controller;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.dinhduong.jobhunter.domain.Permission;
+import com.dinhduong.jobhunter.domain.response.ResultPaginationDTO;
 import com.dinhduong.jobhunter.service.PermissionService;
 import com.dinhduong.jobhunter.util.annotation.ApiMessage;
 import com.dinhduong.jobhunter.util.error.IdInvalidException;
@@ -57,5 +60,11 @@ public class PermissionController {
         }
         this.permissionService.delete(id);
         return ResponseEntity.ok().body(null);
+    }
+
+    @GetMapping("/permissions")
+    @ApiMessage("Fetch all permissions")
+    public ResponseEntity<ResultPaginationDTO> getAll(Pageable pageable) {
+        return ResponseEntity.ok().body(this.permissionService.fetchAll(pageable));
     }
 }
