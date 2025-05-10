@@ -4,10 +4,13 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.dinhduong.jobhunter.domain.Permission;
 import com.dinhduong.jobhunter.domain.Role;
+import com.dinhduong.jobhunter.domain.response.ResultPaginationDTO;
 import com.dinhduong.jobhunter.repository.PermissionRepository;
 import com.dinhduong.jobhunter.repository.RoleRepository;
 
@@ -67,5 +70,18 @@ public class RoleService {
 
     public void delete(long id) {
         this.roleRepository.deleteById(id);
+    }
+
+    public ResultPaginationDTO fetchAll(Pageable pageable) {
+        Page<Role> pageRole = this.roleRepository.findAll(pageable);
+        ResultPaginationDTO rs = new ResultPaginationDTO();
+        ResultPaginationDTO.Meta mt = new ResultPaginationDTO.Meta();
+        mt.setPage(pageable.getPageNumber() + 1);
+        mt.setPageSize(pageable.getPageSize());
+        mt.setPages(pageRole.getTotalPages());
+        mt.setTotal(pageRole.getTotalElements());
+        rs.setMeta(mt);
+        rs.setResult(pageRole.getContent());
+        return rs;
     }
 }
