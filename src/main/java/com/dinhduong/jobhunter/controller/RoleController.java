@@ -2,6 +2,8 @@ package com.dinhduong.jobhunter.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -44,5 +46,15 @@ public class RoleController {
             throw new IdInvalidException("Role name = " + role.getName() + " đã tồn tại");
         }
         return ResponseEntity.ok(this.roleService.update(role));
+    }
+
+    @DeleteMapping("/roles/{id}")
+    @ApiMessage("Delete a role")
+    public ResponseEntity<Void> delete(@PathVariable("id") long id) throws IdInvalidException {
+        if (this.roleService.fetchById(id) == null) {
+            throw new IdInvalidException("Role id = " + id + " không tồn tại");
+        }
+        this.roleService.delete(id);
+        return ResponseEntity.ok().body(null);
     }
 }
