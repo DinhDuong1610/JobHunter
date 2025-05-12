@@ -12,7 +12,7 @@ import com.dinhduong.jobhunter.domain.Role;
 import com.dinhduong.jobhunter.domain.User;
 import com.dinhduong.jobhunter.service.UserService;
 import com.dinhduong.jobhunter.util.SecurityUtil;
-import com.dinhduong.jobhunter.util.error.IdInvalidException;
+import com.dinhduong.jobhunter.util.error.PermissionException;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -43,10 +43,10 @@ public class PermissionInterceptor implements HandlerInterceptor {
                     boolean isAllow = permissions.stream()
                             .anyMatch(item -> item.getApiPath().equals(path) && item.getMethod().equals(httpMethod));
                     if (isAllow == false) {
-                        throw new IdInvalidException("Không có quyền truy cập");
+                        throw new PermissionException("Không có quyền truy cập");
                     }
                 } else {
-                    throw new IdInvalidException("Không có quyền truy cập");
+                    throw new PermissionException("Không có quyền truy cập");
                 }
             }
         }
