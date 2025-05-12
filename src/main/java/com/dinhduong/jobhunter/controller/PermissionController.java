@@ -42,11 +42,7 @@ public class PermissionController {
     @ApiMessage("Update a permission")
     public ResponseEntity<Permission> update(@Valid @RequestBody Permission permission) throws IdInvalidException {
         if (this.permissionService.fetchById(permission.getId()) == null) {
-            throw new IdInvalidException("Permission name = " + permission.getName() + " khong ton tai");
-        }
-
-        if (this.permissionService.isPermissionExist(permission)) {
-            throw new IdInvalidException("Permission name = " + permission.getName() + " đã tồn tại");
+            throw new IdInvalidException("Permission ID = " + permission.getId() + " khong ton tai");
         }
 
         return ResponseEntity.ok().body(this.permissionService.update(permission));
