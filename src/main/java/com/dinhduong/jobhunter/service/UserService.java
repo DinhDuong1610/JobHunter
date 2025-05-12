@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.dinhduong.jobhunter.domain.Company;
+import com.dinhduong.jobhunter.domain.Role;
 import com.dinhduong.jobhunter.domain.User;
 import com.dinhduong.jobhunter.domain.response.ResCreateUserDTO;
 import com.dinhduong.jobhunter.domain.response.ResUpdateUserDTO;
@@ -21,16 +22,23 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final CompanyService companyService;
+    private final RoleService roleService;
 
-    public UserService(UserRepository userRepository, CompanyService companyService) {
+    public UserService(UserRepository userRepository, CompanyService companyService, RoleService roleService) {
         this.userRepository = userRepository;
         this.companyService = companyService;
+        this.roleService = roleService;
     }
 
     public User handleCreateUser(User user) {
         if (user.getCompany() != null) {
             Company company = this.companyService.fetchCompanyById(user.getCompany().getId());
             user.setCompany(company);
+        }
+
+        if (user.getRole() != null) {
+            Role role = this.roleService.fetchById(user.getRole().getId());
+            user.setRole(role);
         }
 
         return this.userRepository.save(user);
