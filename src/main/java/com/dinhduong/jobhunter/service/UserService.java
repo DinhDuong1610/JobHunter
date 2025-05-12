@@ -68,18 +68,7 @@ public class UserService {
         rs.setMeta(mt);
 
         List<ResUserDTO> listUser = pageUser.getContent()
-                .stream().map(item -> new ResUserDTO(
-                        item.getId(),
-                        item.getEmail(),
-                        item.getName(),
-                        item.getGender(),
-                        item.getAddress(),
-                        item.getAge(),
-                        item.getCreatedAt(),
-                        item.getUpdatedAt(),
-                        new ResUserDTO.CompanyUser(
-                                item.getCompany() != null ? item.getCompany().getId() : 0,
-                                item.getCompany() != null ? item.getCompany().getName() : null)))
+                .stream().map(item -> this.convertToResUserDTO(item))
                 .collect(Collectors.toList());
 
         rs.setResult(listUser);
@@ -139,6 +128,8 @@ public class UserService {
     public ResUserDTO convertToResUserDTO(User user) {
         ResUserDTO res = new ResUserDTO();
         ResUserDTO.CompanyUser company = new ResUserDTO.CompanyUser();
+        ResUserDTO.RoleUser role = new ResUserDTO.RoleUser();
+
         res.setId(user.getId());
         res.setEmail(user.getEmail());
         res.setName(user.getName());
@@ -151,6 +142,11 @@ public class UserService {
             company.setId(user.getCompany().getId());
             company.setName(user.getCompany().getName());
             res.setCompany(company);
+        }
+        if (user.getRole() != null) {
+            role.setId(user.getRole().getId());
+            role.setName(user.getRole().getName());
+            res.setRole(role);
         }
         return res;
     }
