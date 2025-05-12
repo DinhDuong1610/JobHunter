@@ -100,6 +100,11 @@ public class UserService {
                 currentUser.setCompany(company);
             }
 
+            if (reqUser.getRole() != null) {
+                Role role = this.roleService.fetchById(reqUser.getRole().getId());
+                currentUser.setRole(role);
+            }
+
             currentUser = this.userRepository.save(currentUser);
         }
         return currentUser;
